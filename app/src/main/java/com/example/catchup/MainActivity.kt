@@ -21,6 +21,14 @@ class MainActivity : ComponentActivity() {
             CATchUpTheme {
                 //MainNavGraph()
 
+                // set up storage
+
+                // pass into nav?
+
+                // nav calls things that are in main activity? i might not need to pass them through in that case
+
+
+
                 BottomNavBar()
             }
         }
