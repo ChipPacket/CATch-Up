@@ -65,7 +65,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                var checked by remember { mutableStateOf(true) }
+                var checked by remember { mutableStateOf(false) }
 
                 Checkbox(
                     checked = checked,
