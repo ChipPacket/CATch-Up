@@ -7,11 +7,11 @@ import androidx.room3.Room
 import androidx.room3.RoomDatabase
 
 // ROOM DATABASE
+//@ColumnTypeConverters(Converters::class)
 @Database(
     entities = [Reminder::class],
     version = 1
 )
-@ColumnTypeConverters(Converters::class)
 abstract class ReminderDatabase : RoomDatabase() {
     abstract fun reminderDao(): ReminderDao
     companion object {
@@ -26,8 +26,9 @@ abstract class ReminderDatabase : RoomDatabase() {
                     context.applicationContext,
                     ReminderDatabase::class.java,
                     "reminder_db"
-                ).build()
-
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
                 INSTANCE = instance
                 instance
             }
@@ -35,5 +36,3 @@ abstract class ReminderDatabase : RoomDatabase() {
     }
 }
 // ROOM DATABASE END
-
-//val db = ReminderDatabase.getDatabase(this)
