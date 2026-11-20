@@ -6,6 +6,7 @@ import androidx.room3.Database
 import androidx.room3.Room
 import androidx.room3.RoomDatabase
 
+// ROOM DATABASE
 @Database(
     entities = [Reminder::class],
     version = 1
@@ -33,5 +34,6 @@ abstract class ReminderDatabase : RoomDatabase() {
         }
     }
 }
+// ROOM DATABASE END
 
 //val db = ReminderDatabase.getDatabase(this)

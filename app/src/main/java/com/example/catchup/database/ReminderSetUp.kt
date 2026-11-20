@@ -12,6 +12,7 @@ import androidx.room3.Update
 import kotlinx.coroutines.flow.Flow
 import java.util.Date
 
+// TYPE CONVERTERS FOR DATE
 object Converters {
     @ColumnTypeConverter
     fun fromTimestamp(value: Long?): Date? {
@@ -23,18 +24,15 @@ object Converters {
         return date?.time
     }
 }
+// TYPE CONVERTERS END
 
+// ROOM ENTITY
 @Entity(tableName = "reminders")
 data class Reminder(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
-
     /// display values
-    @ColumnInfo(name = "reminder_desc")
-    val name: String, // name of the reminder
-
-    val displayTime: String, // for display
-    val displayDate: String, // for display
+    @ColumnInfo(name = "reminder_desc") val name: String,
+    @ColumnInfo(name = "time") val reminderTimeString: String,
+    @ColumnInfo(name = "date") val reminderDateString: String,
 
     // reminder scheduling
     //val reminderTime: Long, // time - will need to make a converter
@@ -43,27 +41,28 @@ data class Reminder(
     // https://medium.com/@caayush/room-tutorial-part-2-insert-and-access-data-61d0efb5a864
 
     // booleans
-    //val repeating: Boolean, // if the reminder repeats
-    //val completed: Boolean, // has it been completed today
-)
+    @ColumnInfo(name = "completed") val completed: Boolean, // has it been completed today
+    @ColumnInfo(name = "enabled") val enabled: Boolean,
 
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+)
+// ROOM ENTITY END
+
+// ROOM DAO
 @Dao
 interface ReminderDao {
     @Insert
-    //suspend fun insert(reminder: Reminder)
-    fun insert(reminder: Reminder)
-
+    suspend fun insert(reminder: Reminder)
 
     @Query("SELECT * FROM reminders")
     fun getAllReminders(): Flow<List<Reminder>>
 
     @Delete
-    //suspend fun delete(reminder: Reminder)
-    fun delete(reminder: Reminder)
-
+    suspend fun delete(reminder: Reminder)
 
     //@Update
     //suspend fun update(reminder: Reminder)
 }
+// ROOM DAO END
 
 

@@ -8,6 +8,7 @@ import androidx.room3.Room
 import androidx.sqlite.driver.AndroidSQLiteDriver
 import com.example.catchup.database.Reminder
 import com.example.catchup.database.ReminderDatabase
+import com.example.catchup.database.ReminderRepository
 import com.example.catchup.ui.screens.BottomNavBar
 import com.example.catchup.ui.theme.CATchUpTheme
 class MainActivity : ComponentActivity() {
@@ -24,11 +25,12 @@ class MainActivity : ComponentActivity() {
             .build()
         val reminderDao = db.reminderDao()
 
-        //val rem1 = Reminder(0, "Wash Hair", "20:00", "Tomorrow")
-        //val rem2 = Reminder(1, "Walk Dog", "15:00", "Tomorrow")
-        //val rem3 = Reminder(2, "Kill John Lennon", "12:00", "Tomorrow")
+        val rem1 = Reminder("Wash Hair", "12:00", "Tomorrow", true, true)
 
         //reminderDao.insert(rem1)
+
+        val reminderRepo = ReminderRepository(reminderDao)
+
         //reminderDao.insert(rem2)
         //reminderDao.insert(rem3)
 
