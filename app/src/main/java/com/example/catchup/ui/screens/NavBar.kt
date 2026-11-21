@@ -29,8 +29,6 @@ enum class Destination(
     HOME("home", "Home", AppIcons.Home,"Home"),
     REMINDERS("reminders", "Reminders", AppIcons.CheckBox,"Reminders"),
     SETTINGS("settings", "Settings", AppIcons.Settings,"Settings"),
-
-    //SONGS("songs", "Songs", AppIcons.MusicNote, "Songs"),
 }
 
 @Composable

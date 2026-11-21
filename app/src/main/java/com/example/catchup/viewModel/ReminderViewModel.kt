@@ -6,8 +6,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.catchup.database.ReminderDatabase
 import com.example.catchup.database.ReminderRepository
 import com.example.catchup.database.Reminder
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -63,6 +65,7 @@ class ReminderViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
+    /*
     fun editReminder(
         name: String,
         alarmTimeHour: Int,
@@ -96,6 +99,8 @@ class ReminderViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
+     */
+
     fun deleteReminder(reminder: Reminder){
         viewModelScope.launch{
             //AlarmScheduler.cancelAlarm(getApplication(), event)
@@ -116,6 +121,39 @@ class ReminderViewModel(application: Application) : AndroidViewModel(application
     // ##### OPERATIONS AND ACTIONS END #####
 
 
+    // ##### NAVIGATION STUFF #####
+    sealed class Screen {
+        object Home: Screen()
+        object Reminders: Screen()
+        object Settings: Screen()
+        // object: AddReminder: Screen()
+    }
+
+    // current screen navigation state (default: home)
+    private val _currentScreen = MutableStateFlow<Screen>(Screen.Reminders)
+    val currentScreen: StateFlow<Screen> = _currentScreen.asStateFlow()
+
+    // nav backstack
+    private val navigationBackstack = mutableListOf<Screen>()
+
+    // Current reminder detail focus or edit focus
+    private val _selectedReminderId = MutableStateFlow<Int?>(null)
+    val selectedEventId: StateFlow<Int?> = _selectedReminderId.asStateFlow()
+
+    fun navigateTo(screen: Screen) {
+        navigationBackstack.add(_currentScreen.value)
+        _currentScreen.value = screen
+    }
+
+    fun navigateBack() {
+        if (navigationBackstack.isNotEmpty()) {
+            val prev = navigationBackstack.removeAt(navigationBackstack.size - 1)
+            _currentScreen.value = prev
+        } else {
+            _currentScreen.value = Screen.Reminders
+        }
+    }
+    // ##### NAVIGATION STUFF END #####
 
 
     // ##### SETTING STATES #####
