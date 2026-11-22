@@ -17,6 +17,7 @@ class ReminderViewModel(application: Application) : AndroidViewModel(application
     // ##### INITIALISING REPOSITORY #####
     private val repository: ReminderRepository // repo
     val allReminders: StateFlow<List<Reminder>> // repo db stream
+    //val allReminders: MutableStateFlow<List<Reminder>> // repo db stream
 
     init {
         val db = ReminderDatabase.getDatabase(application)
@@ -91,7 +92,7 @@ class ReminderViewModel(application: Application) : AndroidViewModel(application
 
             // val id = repository.insertReminder(newReminder)
             /*
-            val insertedEvent = newEvent.copy(id = id.toInt())
+            val insertedEvent = newEvent.copy(id = id.toInt()) <--LOVE WHEN THIS DOESNT WORK FOR NO REASON
             if (hasNotification) {
                 AlarmScheduler.scheduleAlarm(getApplication(), insertedEvent)
             }
@@ -126,11 +127,12 @@ class ReminderViewModel(application: Application) : AndroidViewModel(application
         object Home: Screen()
         object Reminders: Screen()
         object Settings: Screen()
-        // object: AddReminder: Screen()
+
+        //object: AddReminder: Screen()
     }
 
     // current screen navigation state (default: home)
-    private val _currentScreen = MutableStateFlow<Screen>(Screen.Reminders)
+    private val _currentScreen = MutableStateFlow<Screen>(Screen.Home)
     val currentScreen: StateFlow<Screen> = _currentScreen.asStateFlow()
 
     // nav backstack
@@ -150,7 +152,7 @@ class ReminderViewModel(application: Application) : AndroidViewModel(application
             val prev = navigationBackstack.removeAt(navigationBackstack.size - 1)
             _currentScreen.value = prev
         } else {
-            _currentScreen.value = Screen.Reminders
+            _currentScreen.value = Screen.Home
         }
     }
     // ##### NAVIGATION STUFF END #####

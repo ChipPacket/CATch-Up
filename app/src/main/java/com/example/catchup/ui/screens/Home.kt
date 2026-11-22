@@ -81,24 +81,8 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             }
 
 
-
-
         }
+
+
     }
-
-
-
-
-
-
-    //Row(verticalAlignment = Alignment.CenterVertically){
-    //    Text("Today's Progress")
-    //    var todaysProgress: Int = 0
-    //    val todaysTaskNum: Int = 2
-
-    //}
-
-
-
-
 }

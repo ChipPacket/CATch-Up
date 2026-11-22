@@ -40,6 +40,17 @@ class MainActivity : ComponentActivity() {
             // initialise current screen
             val currentScreen by viewModel.currentScreen.collectAsStateWithLifecycle()
 
+            viewModel.addReminder(
+                name = "Killing myself lowkey",
+                alarmTimeHour = 15,
+                alarmTimeMinutes = 25,
+                reminderDateString = "22/11/2026",
+                dateMillis = 100,
+                alarmTimeMillis = 100,
+                completed = false,
+                enabled = true
+            )
+
             CATchUpTheme {
                 Scaffold(
                     bottomBar = {
@@ -78,9 +89,7 @@ class MainActivity : ComponentActivity() {
 
                             }
                             is ReminderViewModel.Screen.Reminders ->{
-                                RemindersScreen(
-                                    TODO()
-                                )
+                                RemindersScreen(viewModel)
                             }
 
                             is ReminderViewModel.Screen.Settings -> {
