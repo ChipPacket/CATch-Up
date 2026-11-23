@@ -1,0 +1,20 @@
+Notifications:
+> MAIN RESOURCE IM USING:
+    > https://aob.hashnode.dev/schedule-local-notifications-on-android-kotlin-using-work-manager#heading-schedule-local-notifications-on-android-kotlin-using-work-manager
+    > https://github.com/demolaf/I-Notify-Kotlin/blob/master/app/src/main/java/com/aob/inotify/util/NotificationUtil.kt
+> ANDROID DOCS
+    > https://developer.android.com/develop/ui/compose/notifications/create-notification
+
+> CONCEPTUAL WALKTHROUGH
+    > https://medium.com/@expertappdevs/android-notification-kotlin-notification-guide-for-enterprise-teams-064266039df3
+.
+.
+Date Time Picker:
+> TIME
+    > https://developer.android.com/develop/ui/compose/components/time-pickers
+> Both / DATE
+    > https://developer.android.com/develop/ui/views/components/pickers
+.
+.
+Reminder Project That Kind Of Sucks But Has Been Insanely Helpful So I Shouldn't Lose It (gulp)
+    > https://github.com/istiakrahman15/reminders/tree/main

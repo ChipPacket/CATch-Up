@@ -32,6 +32,7 @@ import com.example.catchup.viewModel.ReminderViewModel
 @Composable
 fun RemindersScreen(
     viewModel: ReminderViewModel,
+    modifier: Modifier
     //onNavigateToAddReminder: () -> Unit
 ){
     // any initialising here
@@ -55,7 +56,7 @@ fun RemindersScreen(
             FloatingActionButton(
                 containerColor = MaterialTheme.colorScheme.primary,
                 onClick = {
-                    TODO()
+
                 }
             ) { Icon(AppIcons.Add, contentDescription = "Add_Reminder")}
 
@@ -64,7 +65,7 @@ fun RemindersScreen(
             FloatingActionButton(
                 containerColor = MaterialTheme.colorScheme.primary,
                 onClick = {
-                    TODO()
+
                 }
             ) { Icon(AppIcons.Delete, contentDescription = "Delete_Reminder")}
              */
@@ -120,73 +121,3 @@ fun RemindersScreen(
     ) // SCAFFOLD END
 
 }
-
-/*
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun RemindersScreen(modifier: Modifier = Modifier) {
-    // title banner thing
-    CenterAlignedTopAppBar(
-        title = {
-            Text("My Reminders ₍^..^₎⟆ ")
-        },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            titleContentColor = MaterialTheme.colorScheme.primary,
-        ),
-        //windowInsets =
-        //contentPadding =
-        scrollBehavior = pinnedScrollBehavior()
-    )
-
-    Spacer(modifier = Modifier.height(200.dp))
-    Spacer(modifier = Modifier.height(200.dp))
-
-    LazyColumn{
-        items(5){ index->
-
-            Column(
-                Modifier.fillMaxSize(),
-                //verticalArrangement = Arrangement.SpaceAround,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-
-                // reminder cards
-                Card(
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                    ),
-                    modifier = Modifier
-                        .size(width = 350.dp, height = 100.dp)
-                        .wrapContentHeight()
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        //verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        var checked by remember { mutableStateOf(true) }
-
-                        Column{
-                            Switch(
-                                checked = checked,
-                                onCheckedChange = {
-                                    checked = it
-                                },
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.width(20.dp))
-
-                        Column {
-                            Text("Swag number: $index")
-                            //HorizontalDivider(thickness = 2.dp)
-                            Text("Reminder at 22:00")
-                            Text("Will Take 20 Minutes")
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
- */

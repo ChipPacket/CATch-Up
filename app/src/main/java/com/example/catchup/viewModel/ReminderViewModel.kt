@@ -17,7 +17,6 @@ class ReminderViewModel(application: Application) : AndroidViewModel(application
     // ##### INITIALISING REPOSITORY #####
     private val repository: ReminderRepository // repo
     val allReminders: StateFlow<List<Reminder>> // repo db stream
-    //val allReminders: MutableStateFlow<List<Reminder>> // repo db stream
 
     init {
         val db = ReminderDatabase.getDatabase(application)
@@ -120,42 +119,6 @@ class ReminderViewModel(application: Application) : AndroidViewModel(application
         }
     }
     // ##### OPERATIONS AND ACTIONS END #####
-
-
-    // ##### NAVIGATION STUFF #####
-    sealed class Screen {
-        object Home: Screen()
-        object Reminders: Screen()
-        object Settings: Screen()
-
-        //object: AddReminder: Screen()
-    }
-
-    // current screen navigation state (default: home)
-    private val _currentScreen = MutableStateFlow<Screen>(Screen.Home)
-    val currentScreen: StateFlow<Screen> = _currentScreen.asStateFlow()
-
-    // nav backstack
-    private val navigationBackstack = mutableListOf<Screen>()
-
-    // Current reminder detail focus or edit focus
-    private val _selectedReminderId = MutableStateFlow<Int?>(null)
-    val selectedEventId: StateFlow<Int?> = _selectedReminderId.asStateFlow()
-
-    fun navigateTo(screen: Screen) {
-        navigationBackstack.add(_currentScreen.value)
-        _currentScreen.value = screen
-    }
-
-    fun navigateBack() {
-        if (navigationBackstack.isNotEmpty()) {
-            val prev = navigationBackstack.removeAt(navigationBackstack.size - 1)
-            _currentScreen.value = prev
-        } else {
-            _currentScreen.value = Screen.Home
-        }
-    }
-    // ##### NAVIGATION STUFF END #####
 
 
     // ##### SETTING STATES #####
