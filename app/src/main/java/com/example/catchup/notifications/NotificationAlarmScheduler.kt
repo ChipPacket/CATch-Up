@@ -1,0 +1,66 @@
+package com.example.catchup.notifications
+
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Context.ALARM_SERVICE
+import android.content.Intent
+import com.example.catchup.database.Reminder
+import kotlinx.serialization.Contextual
+import kotlin.jvm.java
+
+interface AlarmScheduler {
+    fun createPendingIntent(reminderItem: Reminder): PendingIntent
+    fun schedule(reminderItem: Reminder)
+    fun cancel(reminderItem: Reminder)
+}
+
+/*
+    The NotificationAlarmScheduler is a class for scheduling and cancelling alarms.
+
+    The purpose of implementing the NotificationAlarmScheduler class via the AlarmScheduler interface
+    is to allow this class to adapt to different scenarios in the future.
+
+    At the same time, it increases the testability of the ViewModel and makes the code more flexible
+    when I want to use it within the ViewModel.
+ */
+class NotificationAlarmScheduler(private val context: Context) : AlarmScheduler {
+    private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+    // create and intent that targets alarm receiver using createPendingIntent
+    override fun createPendingIntent(reminderItem: Reminder): PendingIntent {
+        val intent = Intent(context, AlarmReceiver::class.java)
+
+        return PendingIntent.getBroadcast(
+            context,
+            reminderItem.id,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+    }
+
+    /*
+        The schedule method takes ReminderItem as a parameter and
+        schedules a notification to repeat daily at the same time,
+        based on the time information specified in the object.
+        Different parameters can be used for the repetition time.
+     */
+    override fun schedule(reminderItem: Reminder) {
+        alarmManager.setRepeating(
+            AlarmManager.RTC_WAKEUP,
+            reminderItem.timeMillis,
+            AlarmManager.INTERVAL_DAY,
+            createPendingIntent(reminderItem)
+        )
+    }
+
+    // cancel scheduled alarm
+    override fun cancel(reminderItem: Reminder) {
+        alarmManager.cancel(
+            createPendingIntent(reminderItem)
+        )
+    }
+
+}
+

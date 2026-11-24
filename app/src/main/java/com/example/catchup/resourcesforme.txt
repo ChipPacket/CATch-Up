@@ -18,3 +18,9 @@ Date Time Picker:
 .
 Reminder Project That Kind Of Sucks But Has Been Insanely Helpful So I Shouldn't Lose It (gulp)
     > https://github.com/istiakrahman15/reminders/tree/main
+
+Goated?
+    > https://medium.com/@tolgapirim25/send-notifications-at-a-specific-time-with-alarm-manager-on-android-13c7cc9d8e7a
+
+// ewan's code to rip off if necessary (with his permission)
+// https://github.com/blankewa/DundeeMapper/blob/main/src/app/src/main/java/com/example/dundeemapper/ForegroundOnlyLocationService.kt

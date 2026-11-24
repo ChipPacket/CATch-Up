@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
@@ -35,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -56,18 +58,23 @@ fun RemindersScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            CenterAlignedTopAppBar(
                 colors = topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ),
                 title = {
-                    Text("Your Reminders ₍^..^₎⟆")
+                    Text(
+                        "Your Reminders ₍^..^₎⟆",
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
                 }
             )
-
-            Button(onClick = {showDialog = true}) {
-                Text("ADD")
+            Row {
+                Button(onClick = {showDialog = true}) {
+                    Text("ADD")
+                }
             }
         },
 
@@ -124,7 +131,7 @@ fun RemindersScreen(
 
                                 Column {
                                     Text(reminder.name)
-                                    Text(reminder.reminderDateString)
+                                    Text(reminder.date)
                                     //Text("$(reminder.alarmTimeHour) : $(reminder.alarmTimeMinutes)")
                                 }
 
@@ -153,17 +160,18 @@ fun RemindersScreen(
                     )
 
                     var reminderName by remember {mutableStateOf("")}
+                    var reminderDate by remember {mutableStateOf("")}
 
-                    val state = rememberDatePickerState(
-                        initialSelectedDateMillis = System.currentTimeMillis()
-                    )
+                    //val state = rememberDatePickerState(
+                    //    initialSelectedDateMillis = System.currentTimeMillis()
+                    //)
                     // ##### INITIALISED VALUES #####
 
                     // ##### ACTUAL DIALOG DISPLAY #####
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(200.dp)
+                            .height(600.dp)
                             .padding(16.dp),
                         shape = RoundedCornerShape(16.dp),
                     ) {
@@ -178,8 +186,15 @@ fun RemindersScreen(
                             )
 
                             // date input
-                            DatePicker(state = state)
-                            Text("Selected: ${state.selectedDateMillis}")
+                            //DatePicker(state = state)
+                            //Text("Selected: ${state.selectedDateMillis}")
+
+                            // text field for title
+                            TextField(
+                                value = reminderDate,
+                                onValueChange = { reminderDate = it },
+                                label = { Text("Enter Date") }
+                            )
 
                             // text field for title
                             TextField(
@@ -193,7 +208,23 @@ fun RemindersScreen(
                                     Text("Cancel")
                                 }
 
-                                TextButton(onClick = {showDialog=false}){
+                                TextButton(
+                                    onClick = {
+                                        /*
+                                        viewModel.addReminder(
+                                            reminderName,
+                                            22,
+                                            22,
+                                            "11/11/11",
+                                            1,
+                                            1,
+                                            false,
+                                            true)
+
+                                         */
+                                        showDialog = false
+                                    },
+                                ){
                                     Text("Add Reminder")
                                 }
                             }

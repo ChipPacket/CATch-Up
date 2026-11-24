@@ -16,30 +16,8 @@ class MainActivity : ComponentActivity() {
             //create viewmodel
             val viewModel: ReminderViewModel = viewModel()
 
-            // initialise current screen
-            //val currentScreen by viewModel.currentScreen.collectAsStateWithLifecycle()
+            // set up notifications
 
-            viewModel.addReminder(
-                name = "Killing myself lowkey",
-                alarmTimeHour = 15,
-                alarmTimeMinutes = 25,
-                reminderDateString = "22/11/2026",
-                dateMillis = 100,
-                alarmTimeMillis = 100,
-                completed = false,
-                enabled = true
-            )
-
-            viewModel.addReminder(
-                name = "Killing myself again for fun",
-                alarmTimeHour = 13,
-                alarmTimeMinutes = 30,
-                reminderDateString = "25/11/2026",
-                dateMillis = 100,
-                alarmTimeMillis = 100,
-                completed = false,
-                enabled = true
-            )
 
             CATchUpTheme {
                 BottomNavBar(viewModel) // RUN THAT UI
@@ -47,24 +25,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-// ##### CODE DUMP #####
-
-//CATchUpTheme {
-//    BottomNavBar() // run UI
-//}
-
-/* PERMISSIONS SHIT
-// Request Notification Permission for Android 13+
-val permissionLauncher = rememberLauncherForActivityResult(
-    contract = ActivityResultContracts.RequestPermission()
-) { _ -> }
-
-LaunchedEffect(key1 = true) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        permissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
-    }
-}
-
-
- */

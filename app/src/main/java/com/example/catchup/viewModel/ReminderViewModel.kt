@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class ReminderViewModel(application: Application) : AndroidViewModel(application){
+    // > ########## ROOM DATABASE INTEGRATION ##########
     // ##### INITIALISING REPOSITORY #####
     private val repository: ReminderRepository // repo
     val allReminders: StateFlow<List<Reminder>> // repo db stream
@@ -36,22 +37,18 @@ class ReminderViewModel(application: Application) : AndroidViewModel(application
 
     fun addReminder(
         name: String,
-        alarmTimeHour: Int,
-        alarmTimeMinutes: Int,
-        reminderDateString: String,
-        dateMillis: Long,
-        alarmTimeMillis: Long,
+        time: String,
+        //date: String,
+        timeMillis: Long,
         completed: Boolean,
         enabled: Boolean
     ){
         viewModelScope.launch{
             val newReminder = Reminder (
                 name = name,
-                alarmTimeHour = alarmTimeHour,
-                alarmTimeMinutes = alarmTimeMinutes,
-                reminderDateString = reminderDateString,
-                dateMillis = dateMillis,
-                alarmTimeMillis = alarmTimeMillis,
+                time = time,
+                //date = date,
+                timeMillis = timeMillis,
                 completed = completed,
                 enabled = enabled
             )
@@ -119,6 +116,7 @@ class ReminderViewModel(application: Application) : AndroidViewModel(application
         }
     }
     // ##### OPERATIONS AND ACTIONS END #####
+    // > ########## ROOM DATABASE INTEGRATION END ##########
 
 
     // ##### SETTING STATES #####
