@@ -6,14 +6,17 @@ import androidx.lifecycle.viewModelScope
 import com.example.catchup.database.ReminderDatabase
 import com.example.catchup.database.ReminderRepository
 import com.example.catchup.database.Reminder
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import com.example.catchup.notifications.NotificationAlarmScheduler
+import android.content.Context
 
-class ReminderViewModel(application: Application) : AndroidViewModel(application){
+class ReminderViewModel(
+    application: Application,
+    context: Context
+) : AndroidViewModel(application){
     // > ########## ROOM DATABASE INTEGRATION ##########
     // ##### INITIALISING REPOSITORY #####
     private val repository: ReminderRepository // repo
@@ -38,7 +41,6 @@ class ReminderViewModel(application: Application) : AndroidViewModel(application
     fun addReminder(
         name: String,
         time: String,
-        //date: String,
         timeMillis: Long,
         completed: Boolean,
         enabled: Boolean
@@ -47,60 +49,19 @@ class ReminderViewModel(application: Application) : AndroidViewModel(application
             val newReminder = Reminder (
                 name = name,
                 time = time,
-                //date = date,
                 timeMillis = timeMillis,
                 completed = completed,
                 enabled = enabled
             )
-            val id = repository.insertReminder(newReminder)
-            /*
-            val insertedEvent = newEvent.copy(id = id.toInt())
-            if (hasNotification) {
-                AlarmScheduler.scheduleAlarm(getApplication(), insertedEvent)
-            }
-             */
+            //val id = repository.insertReminder(newReminder)
+            repository.insertReminder(newReminder)
+            notificationAlarmScheduler.schedule(newReminder)
         }
     }
-
-    /*
-    fun editReminder(
-        name: String,
-        alarmTimeHour: Int,
-        alarmTimeMinutes: Int,
-        reminderDateString: String,
-        dateMillis: Long,
-        alarmTimeMillis: Long,
-        completed: Boolean,
-        enabled: Boolean,
-        id: Int
-    ){
-        viewModelScope.launch{
-            val oldReminder = repository.getReminderById(id)
-
-            //if (oldReminder != null){
-                /*
-                    // Cancel old alarm
-                    AlarmScheduler.cancelAlarm(getApplication(), oldEvent)
-                 */
-            //}
-
-            //val newReminder = oldReminder.
-
-            // val id = repository.insertReminder(newReminder)
-            /*
-            val insertedEvent = newEvent.copy(id = id.toInt()) <--LOVE WHEN THIS DOESNT WORK FOR NO REASON
-            if (hasNotification) {
-                AlarmScheduler.scheduleAlarm(getApplication(), insertedEvent)
-            }
-             */
-        }
-    }
-
-     */
 
     fun deleteReminder(reminder: Reminder){
         viewModelScope.launch{
-            //AlarmScheduler.cancelAlarm(getApplication(), event)
+            notificationAlarmScheduler.cancel(reminder)
             repository.deleteReminder(reminder)
         }
     }
@@ -109,23 +70,22 @@ class ReminderViewModel(application: Application) : AndroidViewModel(application
         viewModelScope.launch{
             val nextCompleted = !reminder.completed
             repository.updateCompletion(reminder.id, reminder.completed)
-
-            //if (nextCompleted){
-                //AlarmScheduler.cancelAlarm(getApplication(), event)
-            //}
+            //notificationAlarmScheduler.cancel(reminder)
         }
     }
     // ##### OPERATIONS AND ACTIONS END #####
     // > ########## ROOM DATABASE INTEGRATION END ##########
 
+    // > ##### NOTIFICATION HANDLER  #####
+    val notificationAlarmScheduler by lazy {
+        NotificationAlarmScheduler(context)
+    }
+    // > ##### NOTIFICATION HANDLER END  #####
+
 
     // ##### SETTING STATES #####
-
     /*
         ENTER CODE FOR SETTING STATES HERE
-        WOO
-        MORE LINES OF CODE
-        SO EXCITING
      */
     // ##### SETTING STATES END #####
 

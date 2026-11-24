@@ -24,3 +24,5 @@ Goated?
 
 // ewan's code to rip off if necessary (with his permission)
 // https://github.com/blankewa/DundeeMapper/blob/main/src/app/src/main/java/com/example/dundeemapper/ForegroundOnlyLocationService.kt
+
+https://vtsen.hashnode.dev/implement-viewmodelproviderfactory-interface-for-custom-viewmodel-androidviewmodel-factory-creation

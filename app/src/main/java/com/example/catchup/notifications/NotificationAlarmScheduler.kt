@@ -26,7 +26,8 @@ interface AlarmScheduler {
     when I want to use it within the ViewModel.
  */
 class NotificationAlarmScheduler(private val context: Context) : AlarmScheduler {
-    private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+    private val alarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
 
     // create and intent that targets alarm receiver using createPendingIntent
     override fun createPendingIntent(reminderItem: Reminder): PendingIntent {

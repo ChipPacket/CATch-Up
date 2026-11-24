@@ -1,5 +1,6 @@
 package com.example.catchup.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -131,8 +132,7 @@ fun RemindersScreen(
 
                                 Column {
                                     Text(reminder.name)
-                                    Text(reminder.date)
-                                    //Text("$(reminder.alarmTimeHour) : $(reminder.alarmTimeMinutes)")
+                                    Text(reminder.time)
                                 }
 
                             } // row end
@@ -185,6 +185,9 @@ fun RemindersScreen(
                                 state = timePickerState,
                             )
 
+
+
+
                             // date input
                             //DatePicker(state = state)
                             //Text("Selected: ${state.selectedDateMillis}")
@@ -210,18 +213,27 @@ fun RemindersScreen(
 
                                 TextButton(
                                     onClick = {
+
+                                        // convert timepicker state to string
+                                        // convert timepicker to milliseconds
+
                                         /*
+                                        val stringTime = timestate.tostring
+                                        val millisTime = timestate.tomillis
+
                                         viewModel.addReminder(
-                                            reminderName,
-                                            22,
-                                            22,
-                                            "11/11/11",
-                                            1,
-                                            1,
-                                            false,
-                                            true)
+                                        reminderName,
+                                        stringTime,
+                                        millisTime,
+                                        false,
+                                        true
+                                        )
 
                                          */
+                                        println(timePickerState)
+
+
+
                                         showDialog = false
                                     },
                                 ){
