@@ -43,7 +43,7 @@ interface ReminderDao {
     fun getAllReminders(): Flow<List<Reminder>>
 
     @Query("SELECT * FROM reminders WHERE id = :id")
-    suspend fun getReminderById(id: Int): Reminder?
+    suspend fun getReminderById(id: Int): Reminder
 
     @Query("UPDATE reminders SET completed = :completed WHERE id = :id")
     suspend fun updateCompletionStatus(id: Int, completed: Boolean)

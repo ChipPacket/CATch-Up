@@ -34,7 +34,7 @@ class ReminderViewModel(
     }
 
     // ##### OPERATIONS AND ACTIONS #####
-    suspend fun getReminderById(id: Int) {
+    suspend fun getReminderById(id: Int) : Reminder? {
         return repository.getReminderById(id)
     }
 
@@ -59,10 +59,10 @@ class ReminderViewModel(
         }
     }
 
-    fun deleteReminder(reminder: Reminder){
+    fun deleteReminder(id: Int){
         viewModelScope.launch{
-            notificationAlarmScheduler.cancel(reminder)
-            repository.deleteReminder(reminder)
+            //notificationAlarmScheduler.cancel(getReminderById(id))
+           // repository.deleteReminder(getReminderById(id))
         }
     }
 

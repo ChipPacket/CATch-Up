@@ -13,8 +13,8 @@ class ReminderRepository(val reminderDao: ReminderDao){
         reminderDao.delete(reminder)
     }
 
-    suspend fun getReminderById(id: Int){
-        reminderDao.getReminderById(id)
+    suspend fun getReminderById(id: Int): Reminder {
+        return reminderDao.getReminderById(id)
     }
 
     suspend fun updateCompletion(id: Int, completed:Boolean){

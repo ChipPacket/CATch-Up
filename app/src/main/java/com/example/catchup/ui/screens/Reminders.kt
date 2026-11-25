@@ -1,7 +1,6 @@
 package com.example.catchup.ui.screens
 
 import android.util.Log
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -54,8 +53,11 @@ import com.example.catchup.viewModel.ReminderViewModel
 import java.util.Calendar
 import java.util.Locale
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ElevatedCard
 
 
 @Composable
@@ -65,7 +67,9 @@ fun RemindersScreen(
     //onNavigateToAddReminder: () -> Unit
 ){
     // any initialising here
-    var showDialog by remember { mutableStateOf(false) }
+    var showAddDialog by remember { mutableStateOf(false) }
+    var showDeleteDialog by remember {mutableStateOf(false)}
+
     val allRemindersList = viewModel.allReminders.collectAsStateWithLifecycle(listOf())
 
     Scaffold(
@@ -99,10 +103,10 @@ fun RemindersScreen(
                     horizontalArrangement = Arrangement.SpaceAround,
                     verticalAlignment = Alignment.CenterVertically
                 ){
-                    Button(onClick = {showDialog = true}) {
+                    Button(onClick = {showAddDialog = true}) {
                         Text("ADD REMINDER")
                     }
-                    Button(onClick = {showDialog = true}) {
+                    Button(onClick = {showDeleteDialog = true}) {
                         Text("DELETE REMINDER")
                     }
                 }
@@ -198,9 +202,9 @@ fun RemindersScreen(
 
             } // column end
 
-            if (showDialog){
+            if (showAddDialog){
                 Dialog(
-                    onDismissRequest = {showDialog = false}
+                    onDismissRequest = {showAddDialog = false},
                 )
                 {
                     // ##### INITIALISED VALUES #####
@@ -221,30 +225,27 @@ fun RemindersScreen(
                     // ##### INITIALISED VALUES #####
 
                     // ##### ACTUAL DIALOG DISPLAY #####
-                    Card(
+                    ElevatedCard(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(600.dp)
+                            .height(400.dp)
                             .padding(16.dp),
                         shape = RoundedCornerShape(16.dp),
                     ) {
                         // ### DIALOG BODY ###
-                        Column(){
+                        Column(
+                            verticalArrangement = Arrangement.Center
+                        ){
                             Text(
-                                text="Add New Reminder ₍^..^₎⟆"
+                                text="Add New Reminder ₍^..^₎⟆",
+                                Modifier.align(Alignment.CenterHorizontally),
+                                fontSize = 20.sp,
                             )
 
                             TimeInput(
                                 state = timePickerState,
+                                Modifier.align(Alignment.CenterHorizontally)
                             )
-
-
-
-
-                            // date input
-                            //DatePicker(state = state)
-                            //Text("Selected: ${state.selectedDateMillis}")
-
 
                             // text field for title
                             TextField(
@@ -254,7 +255,7 @@ fun RemindersScreen(
                             )
 
                             Row(){
-                                TextButton(onClick = {showDialog=false}){
+                                TextButton(onClick = {showAddDialog=false}){
                                     Text("Cancel")
                                 }
 
@@ -289,7 +290,7 @@ fun RemindersScreen(
                                             true
                                         )
 
-                                        showDialog = false
+                                        showAddDialog = false
                                     },
                                 ){
                                     Text("Add Reminder")
@@ -303,13 +304,68 @@ fun RemindersScreen(
 
                     }
                     // ##### ACTUAL DIALOG DISPLAY #####
-                }
-            }
+                }// DIALOG END
 
+
+            } // if show add dialog
+
+            if (showDeleteDialog){
+                Dialog(
+                    onDismissRequest = {showDeleteDialog = false},
+                ) {
+                    var idToDelete by remember {mutableStateOf("")}
+
+                    // ##### ACTUAL DIALOG DISPLAY #####
+                    ElevatedCard(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(400.dp)
+                            .padding(16.dp),
+                        shape = RoundedCornerShape(16.dp),
+                    ) {
+                        // ### DIALOG BODY ###
+                        Column(
+                            verticalArrangement = Arrangement.Center
+                        ){
+                            Text(
+                                text="Delete a Reminder ₍^..^₎⟆",
+                                Modifier.align(Alignment.CenterHorizontally),
+                                fontSize = 20.sp,
+                            )
+
+                            // text field for title
+                            TextField(
+                                value = idToDelete,
+                                onValueChange = { idToDelete = it },
+                                label = { Text("Enter Id of Reminder to Delete") }
+                            )
+
+                            Row(){
+                                TextButton(onClick = {showDeleteDialog=false}){
+                                    Text("Cancel")
+                                }
+
+                                TextButton(
+                                    onClick = {
+                                        /*
+                                        val idNum = idToDelete.toInt()
+
+                                        viewModel.deleteReminder(idNum)
+
+                                         */
+
+                                        showDeleteDialog = false
+                                    },
+                                ){
+                                    Text("Delete Reminder")
+                                }
+                            }
+                        } // ### DIALOG BODY ###
+                    } // ##### ACTUAL DIALOG DISPLAY #####
+                }// DIALOG END
+            } // if show add dialog
         } // content end
-
     ) // SCAFFOLD END
-
 }
 
 
