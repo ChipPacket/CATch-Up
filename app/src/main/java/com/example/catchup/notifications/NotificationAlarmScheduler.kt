@@ -1,13 +1,20 @@
 package com.example.catchup.notifications
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Context.ALARM_SERVICE
 import android.content.Intent
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
+import androidx.annotation.RequiresPermission
 import com.example.catchup.database.Reminder
 import kotlinx.serialization.Contextual
+import java.util.Date
 import kotlin.jvm.java
 
 interface AlarmScheduler {
@@ -31,13 +38,19 @@ class NotificationAlarmScheduler(private val context: Context) : AlarmScheduler 
 
     // create and intent that targets alarm receiver using createPendingIntent
     override fun createPendingIntent(reminderItem: Reminder): PendingIntent {
-        val intent = Intent(context, AlarmReceiver::class.java)
+        val intent = Intent(
+            context,
+            AlarmReceiver::class.java
+        ).apply {
+            putExtra("REMINDER_NAME", reminderItem.name)
+        }
 
         return PendingIntent.getBroadcast(
             context,
             reminderItem.id,
             intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_UPDATE_CURRENT or
+                    PendingIntent.FLAG_IMMUTABLE
         )
     }
 
@@ -47,13 +60,32 @@ class NotificationAlarmScheduler(private val context: Context) : AlarmScheduler 
         based on the time information specified in the object.
         Different parameters can be used for the repetition time.
      */
+    //     @RequiresPermission(Manifest.permission.SCHEDULE_EXACT_ALARM)
+    @RequiresApi(Build.VERSION_CODES.S)
+    @SuppressLint("ScheduleExactAlarm")
     override fun schedule(reminderItem: Reminder) {
-        alarmManager.setRepeating(
-            AlarmManager.RTC_WAKEUP,
-            reminderItem.timeMillis,
-            AlarmManager.INTERVAL_DAY,
-            createPendingIntent(reminderItem)
+        Log.e(
+            "ALARM_TEST",
+            "Scheduling alarm for ${Date(reminderItem.timeMillis)}"
         )
+
+        Log.e(
+            "ALARM_TEST",
+            "canScheduleExactAlarms = ${alarmManager.canScheduleExactAlarms()}"
+        )
+
+        if (alarmManager.canScheduleExactAlarms()) {
+            alarmManager.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                reminderItem.timeMillis,
+                createPendingIntent(reminderItem)
+            )
+        } else {
+            Log.e(
+                "ALARM_TEST",
+                "Exact alarms not permitted"
+            )
+        }
     }
 
     // cancel scheduled alarm

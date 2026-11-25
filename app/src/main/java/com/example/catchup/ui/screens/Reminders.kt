@@ -1,6 +1,8 @@
 package com.example.catchup.ui.screens
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -56,10 +58,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.ui.text.input.KeyboardType
 
 
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun RemindersScreen(
     viewModel: ReminderViewModel,
@@ -119,9 +124,16 @@ fun RemindersScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ){
                     Text(
+                        text = "ID",
+                        fontSize = 13.sp,
+                    )
+                    /*
+                    Text(
                         text = "Completed",
                         fontSize = 13.sp,
                     )
+
+                     */
                     Text(
                         text = "Name",
                         fontSize = 13.sp,
@@ -130,35 +142,18 @@ fun RemindersScreen(
                         text = "Time",
                         fontSize = 13.sp,
                     )
+
                     Text(
                         text = "Enabled",
                         fontSize = 13.sp,
                     )
+
+
                 }
 
                 if (allRemindersList!=null){
                     LazyColumn {
                         items(allRemindersList.value){ reminder ->
-                            /*
-                            Row (){
-                                // toggle on / off - call state from db
-                                var checked by remember { mutableStateOf(true) }
-
-                                Switch(
-                                    checked = checked,
-                                    onCheckedChange = {
-                                        checked = it
-                                    }
-                                )
-
-                                Column {
-                                    Text(reminder.name)
-                                    Text(reminder.time)
-                                }
-
-                            } // row end
-                             */
-
                             Row(
                                 modifier = Modifier
                                     .padding(horizontal = 16.dp, vertical = 12.dp)
@@ -167,6 +162,7 @@ fun RemindersScreen(
                                 verticalAlignment = Alignment.CenterVertically
                             ){
 
+                                /*
                                 // checkbox
                                 var checked1 by remember { mutableStateOf(false) }
 
@@ -175,10 +171,14 @@ fun RemindersScreen(
                                     onCheckedChange = { checked1 = it }
                                 )
 
+                                 */
+
                                 //Column {
+                                    Text(reminder.id.toString())
                                     Text(reminder.name)
                                     Text(reminder.time)
                                 //}
+
 
                                 var checked2 by remember { mutableStateOf(true) }
 
@@ -217,7 +217,7 @@ fun RemindersScreen(
                     )
 
                     var reminderName by remember {mutableStateOf("")}
-                    var reminderDate by remember {mutableStateOf("")}
+                    //var reminderDate by remember {mutableStateOf("")}
 
                     //val state = rememberDatePickerState(
                     //    initialSelectedDateMillis = System.currentTimeMillis()
@@ -319,7 +319,7 @@ fun RemindersScreen(
                     ElevatedCard(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(400.dp)
+                            .height(200.dp)
                             .padding(16.dp),
                         shape = RoundedCornerShape(16.dp),
                     ) {
@@ -337,6 +337,9 @@ fun RemindersScreen(
                             TextField(
                                 value = idToDelete,
                                 onValueChange = { idToDelete = it },
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = KeyboardType.Number
+                                ),
                                 label = { Text("Enter Id of Reminder to Delete") }
                             )
 
@@ -347,13 +350,10 @@ fun RemindersScreen(
 
                                 TextButton(
                                     onClick = {
-                                        /*
-                                        val idNum = idToDelete.toInt()
-
-                                        viewModel.deleteReminder(idNum)
-
-                                         */
-
+                                        val id: Int? = idToDelete.toIntOrNull()
+                                        if (id != null) {
+                                            viewModel.deleteReminder(id)
+                                        }
                                         showDeleteDialog = false
                                     },
                                 ){

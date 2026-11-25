@@ -34,7 +34,7 @@ data class Reminder(
 @Dao
 interface ReminderDao {
     @Insert
-    suspend fun insert(reminder: Reminder)
+    suspend fun insert(reminder: Reminder): Long
 
     @Delete
     suspend fun delete(reminder: Reminder)
@@ -48,11 +48,11 @@ interface ReminderDao {
     @Query("UPDATE reminders SET completed = :completed WHERE id = :id")
     suspend fun updateCompletionStatus(id: Int, completed: Boolean)
 
-    //@Query("UPDATE reminders SET completed = :completed WHERE id = :id")
-    //suspend fun updateCompletionStatus(id: Int, completed: Boolean)
+    @Query("DELETE FROM reminders")
+    suspend fun deleteAllReminders()
 
-    //@Update
-    //suspend fun update(reminder: Reminder)
+    @Query("DELETE FROM reminders WHERE id = :id")
+    suspend fun deleteReminderById(id: Int)
 }
 // ROOM DAO END
 

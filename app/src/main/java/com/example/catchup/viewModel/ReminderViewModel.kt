@@ -12,6 +12,8 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import com.example.catchup.notifications.NotificationAlarmScheduler
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 
 class ReminderViewModel(
     application: Application,
@@ -38,6 +40,7 @@ class ReminderViewModel(
         return repository.getReminderById(id)
     }
 
+    @RequiresApi(Build.VERSION_CODES.S)
     fun addReminder(
         name: String,
         time: String,
@@ -46,16 +49,21 @@ class ReminderViewModel(
         enabled: Boolean
     ){
         viewModelScope.launch{
-            val newReminder = Reminder (
+            val newReminder = Reminder(
                 name = name,
                 time = time,
                 timeMillis = timeMillis,
                 completed = completed,
                 enabled = enabled
             )
-            //val id = repository.insertReminder(newReminder)
-            repository.insertReminder(newReminder)
-            notificationAlarmScheduler.schedule(newReminder)
+
+            val generatedId = repository.insertReminder(newReminder)
+
+            notificationAlarmScheduler.schedule(
+                newReminder.copy(
+                    id = generatedId.toInt()
+                )
+            )
         }
     }
 
@@ -71,6 +79,33 @@ class ReminderViewModel(
             val nextCompleted = !reminder.completed
             repository.updateCompletion(reminder.id, reminder.completed)
             //notificationAlarmScheduler.cancel(reminder)
+        }
+    }
+
+    fun deleteAllReminders() {
+        viewModelScope.launch {
+
+            // Get all reminders currently stored
+            val reminders = allReminders.value
+
+            // Cancel all scheduled alarms
+            reminders.forEach { reminder ->
+                notificationAlarmScheduler.cancel(reminder)
+            }
+
+            // Delete everything from Room
+            repository.deleteAllReminders()
+        }
+    }
+
+    fun deleteReminderbyId(id: Int) {
+        viewModelScope.launch {
+
+            val reminder = repository.getReminderById(id)
+
+            notificationAlarmScheduler.cancel(reminder)
+
+            repository.deleteReminder(reminder)
         }
     }
     // ##### OPERATIONS AND ACTIONS END #####

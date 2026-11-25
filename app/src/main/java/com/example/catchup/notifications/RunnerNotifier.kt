@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 
@@ -22,11 +23,17 @@ abstract class Notifier(
     abstract val notificationId: Int
 
     fun showNotification() {
+        Log.d("ALARM_TEST", "Creating notification")
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = createNotificationChannel()
             notificationManager.createNotificationChannel(channel)
         }
+
         val notification = buildNotification()
+
+        Log.d("ALARM_TEST", "Calling notify()")
+
         notificationManager.notify(
             notificationId,
             notification
@@ -35,13 +42,21 @@ abstract class Notifier(
 
     @RequiresApi(Build.VERSION_CODES.O)
     open fun createNotificationChannel(
-        importance: Int = NotificationManager.IMPORTANCE_DEFAULT
+        importance: Int = NotificationManager.IMPORTANCE_HIGH
     ): NotificationChannel {
         return NotificationChannel(
             notificationChannelId,
             notificationChannelName,
             importance
-        )
+        ).apply{
+            enableVibration(true)
+            vibrationPattern = longArrayOf(
+                0,    // no delay
+                500,  // vibrate 500ms
+                250,  // pause 250ms
+                500   // vibrate 500ms
+            )
+        }
     }
 
     abstract fun buildNotification(): Notification
@@ -55,7 +70,8 @@ abstract class Notifier(
  */
 class RunnerNotifier(
     private val notificationManager: NotificationManager,
-    private val context: Context
+    private val context: Context,
+    private val reminderName: String
 ) : Notifier(notificationManager) {
 
     override val notificationChannelId: String = "notif_channel_id"
@@ -71,10 +87,10 @@ class RunnerNotifier(
     }
 
     override fun getNotificationTitle(): String {
-        return "Time to go for a run 🏃‍️"
+        return reminderName
     }
 
     override fun getNotificationMessage(): String {
-        return "You are ready to go for a run?"
+        return "It's time to CATch Up! ฅ₍^•⩊ •マⳊ"
     }
 }
