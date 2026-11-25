@@ -14,7 +14,9 @@ class AlarmReceiver : BroadcastReceiver() {
         context?.let {
             val notificationManager =
                 it.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
             val runnerNotifier = RunnerNotifier(notificationManager, it)
+
             runnerNotifier.showNotification()
         }
     }

@@ -19,9 +19,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.catchup.ui.screens.AppIcons
-import com.example.catchup.ui.screens.HomeScreen
+import com.example.catchup.ui.screens.StopwatchScreen
 import com.example.catchup.ui.screens.RemindersScreen
 import com.example.catchup.ui.screens.SettingsScreen
+import com.example.catchup.ui.screens.StopwatchScreen
 import com.example.catchup.viewModel.ReminderViewModel
 
 enum class Destination(
@@ -30,7 +31,7 @@ enum class Destination(
     val icon: ImageVector,
     val contentDescription: String
 ) {
-    HOME("home", "Home", AppIcons.Home,"Home"),
+    STOPWATCH("stopwatch", "Stopwatch", AppIcons.FastForward,"Stopwatch"),
     REMINDERS("reminders", "Reminders", AppIcons.CheckBox,"Reminders"),
     SETTINGS("settings", "Settings", AppIcons.Settings,"Settings"),
 }
@@ -49,7 +50,7 @@ fun AppNavHost(
         Destination.entries.forEach { destination ->
             composable(destination.route) {
                 when (destination) {
-                    Destination.HOME -> HomeScreen(viewModel, modifier)
+                    Destination.STOPWATCH -> StopwatchScreen(viewModel, modifier)
                     Destination.REMINDERS -> RemindersScreen(viewModel, modifier)
                     Destination.SETTINGS -> SettingsScreen(viewModel, modifier)
                 }
@@ -62,7 +63,7 @@ fun AppNavHost(
 @Composable
 fun BottomNavBar(viewModel: ReminderViewModel){
     val navController = rememberNavController()
-    val startDestination = Destination.HOME
+    val startDestination = Destination.REMINDERS
     var selectedDestination by rememberSaveable {mutableIntStateOf(startDestination.ordinal)}
 
     Scaffold(

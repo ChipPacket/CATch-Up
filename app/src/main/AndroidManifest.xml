@@ -14,7 +14,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CATchUp">
+
         <receiver android:name=".notifications.AlarmReceiver" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
